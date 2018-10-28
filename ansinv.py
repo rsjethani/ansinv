@@ -151,48 +151,44 @@ class AnsibleInventory:
 
         return json.dumps(self._inventory, indent=2, cls=SetJSONEncoder)
 
-#    def _host_as_ini(self, host, inventory):
-#        hostline = [host]
-#        for var, val in inventory["_meta"]["hostvars"][host].items():
-#            hostline.append("{}={}".format(var, val))
-#
-#        return " ".join(hostline)
-#
-#    def as_ini(self):
-#        inventory = self._as_json()
-#
-#        final = []
-#
-#        for host in inventory["ungrouped"]["hosts"]:
-#            final.append(self._host_as_ini(host, inventory))
-#
-#        del inventory["ungrouped"]
-#
-#        if inventory["all"]["vars"]:
-#            final.append("\n[{}:{}]".format("all","vars"))
-#            for var, val in inventory["all"]["vars"].items():
-#                final.append("{}={}".format(var,val))
-#
-#        del inventory["all"]
-#                
-#        for group, data in inventory.items():
-#            if group == "_meta":
-#                continue
-#
-#            final.append("\n[{}]".format(group))
-#
-#            for host in data["hosts"]:
-#                final.append(self._host_as_ini(host, inventory))
-#
-#            if data["vars"]:
-#                final.append("\n[{}:vars]".format(group))
-#                for var, val in data["vars"].items():
-#                    final.append("{}={}".format(var,val))
-#
-#            if data["children"]:
-#                final.append("\n[{}:children]".format(group))
-#                for child in data["children"]:
-#                    final.append("{}".format(child))
-#        
-#        return "\n".join(final)
+    def _host_as_ini(self, host):
+        hostline = [host]
+        for var, val in self._inventory["_meta"]["hostvars"][host].items():
+            hostline.append("{}={}".format(var, val))
+
+        return " ".join(hostline)
+
+    def as_ini(self):
+        final = []
+
+        # process ungrouped hosts
+        for host in self._inventory["ungrouped"]["hosts"]:
+            final.append(self._host_as_ini(host))
+
+        # process groups
+        for group in set(self.groups) - {"all"}:
+            data = self._inventory[group]
+
+            if data["hosts"]:
+                final.append("\n[{}]".format(group))
+                for host in data["hosts"]:
+                    final.append(self._host_as_ini(host))
+
+            if data["vars"]:
+                final.append("\n[{}:vars]".format(group))
+                for var, val in data["vars"].items():
+                    final.append("{}={}".format(var,val))
+
+            if data["children"]:
+                final.append("\n[{}:children]".format(group))
+                for child in data["children"]:
+                    final.append("{}".format(child))
+
+        # process all:vars
+        if self._inventory["all"]["vars"]:
+            final.append("\n[{}:{}]".format("all","vars"))
+            for var, val in self._inventory["all"]["vars"].items():
+                final.append("{}={}".format(var,val))
+
+        return "\n".join(final)
 
