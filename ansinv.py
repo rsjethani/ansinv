@@ -123,6 +123,10 @@ class AnsibleInventory:
         return list(self._all_hosts)
 
     @property
+    def ungrouped(self):
+        return list(self._ungrouped_hosts)
+
+    @property
     def groups(self):
         grps = list(self._inventory)
         grps.remove("ungrouped")
