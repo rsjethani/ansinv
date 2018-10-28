@@ -6,7 +6,7 @@ from os import path
 setup(
 
     name = "ansinv",
-    version = "1.1.0",
+    version = "1.2.0",
     description = "Create Ansible Inventory",
     author = "Ravi Shekhar Jethani",
     author_email = "rsjethani@gamil.com",
