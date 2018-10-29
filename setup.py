@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     license="MIT",
-    author="Ravi Jethani",
+    author="Ravi Shekhar Jethani",
     author_email="rsjethani@gmail.com",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
