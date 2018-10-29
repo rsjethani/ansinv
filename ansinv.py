@@ -107,7 +107,9 @@ class AnsibleInventory:
 
     def add_children_to_group(self, parent, *children):
         # check all groups exists and they are allowed to be modified
-        non_existing = set([parent, *children]) - set(self.groups)
+        non_existing = set((parent,) + children) - set(self.groups)
+        # FYI Python3 only syntax can be like:
+        # non_existing = set([parent, *children]) - set(self.groups)
         if non_existing:
             raise GroupsNotFound(non_existing)
 
