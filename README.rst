@@ -1,3 +1,6 @@
+.. image:: https://badge.fury.io/py/ansinv.svg
+    :target: https://badge.fury.io/py/ansinv
+
 A Simple Ansible Inventory Generator
 ------------------------------------
 
