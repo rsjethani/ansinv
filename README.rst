@@ -1,4 +1,4 @@
-|pic1| |pic2| |pic3|
+|pic1| |pic2| |pic3| |pic4|
 
 A Simple Ansible Inventory Generator
 ------------------------------------
@@ -16,3 +16,6 @@ This simple library makes it easier to write ``glue`` code when you are using An
 
 .. |pic3| image:: https://travis-ci.com/rsjethani/ansinv.svg?branch=master
    :target: https://travis-ci.com/rsjethani/ansinv
+
+.. |pic4| image:: https://coveralls.io/repos/github/rsjethani/ansinv/badge.svg?branch=master
+   :target: https://coveralls.io/github/rsjethani/ansinv?branch=master
