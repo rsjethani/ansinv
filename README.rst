@@ -1,10 +1,10 @@
 |pic1| |pic2|
 
 .. |pic1| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-    :target: https://opensource.org/licenses/MIT
+   :target: https://opensource.org/licenses/MIT
 
 .. |pic2| image:: https://badge.fury.io/py/ansinv.svg
-    :target: https://badge.fury.io/py/ansinv
+   :target: https://pypi.org/project/ansinv
 
 A Simple Ansible Inventory Generator
 ------------------------------------
