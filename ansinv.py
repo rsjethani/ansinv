@@ -62,7 +62,7 @@ class AnsibleInventory:
 
     def add_group(self, group, **groupvars):
         if group in ("_meta", "ungrouped"):
-            raise ValueError("name '{}' is reserved hence cannot be used as a group name".format(group))
+            raise ValueError("a new group cannot use the reserved name '{}'".format(group))
 
         if group not in self.groups:
             self._inventory[group] = {
@@ -73,16 +73,16 @@ class AnsibleInventory:
             self._all_children.add(group)
 
     def get_groupvars(self, group):
-        try:
-            return self._inventory[group]["vars"]
-        except KeyError:
+        if group not in self.groups:
             raise GroupsNotFound(group)
 
+        return self._inventory[group]["vars"]
+
     def update_groupvars(self, group, **groupvars):
-        try:
-            self._inventory[group]["vars"].update(groupvars)
-        except KeyError:
+        if group not in self.groups:
             raise GroupsNotFound(group)
+
+        self._inventory[group]["vars"].update(groupvars)
 
     def add_hosts_to_group(self, group, *hosts):
         if group not in self.groups:
