@@ -1,4 +1,9 @@
-.. image:: https://badge.fury.io/py/ansinv.svg
+|pic1| |pic2|
+
+.. |pic1| image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
+
+.. |pic2| image:: https://badge.fury.io/py/ansinv.svg
     :target: https://badge.fury.io/py/ansinv
 
 A Simple Ansible Inventory Generator
