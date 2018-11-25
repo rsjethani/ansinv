@@ -6,7 +6,7 @@
 .. |pic2| image:: https://badge.fury.io/py/ansinv.svg
    :target: https://pypi.org/project/ansinv
 
-.. |pic3| image:: https://travis-ci.com/username/projectname.svg
+.. |pic3| image:: https://travis-ci.com/username/projectname.svg?branch=master
    :target: https://travis-ci.com/rsjethani/ansinv
 
 A Simple Ansible Inventory Generator
