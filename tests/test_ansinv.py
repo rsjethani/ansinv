@@ -1,4 +1,5 @@
 import json
+import re
 
 
 import pytest
@@ -181,3 +182,29 @@ def test_groups_property():
     assert "_meta", "ungrouped" not in test_inventory.groups
     assert len(test_inventory.groups) == 3 + 1
 
+
+def test_as_ini():
+    test_inventory = AnsibleInventory("h1", "h2", "h3", "h4")
+    test_inventory.update_hostvars("h1", h1var1="h1val1", h1var2="h1val2")
+    test_inventory.update_hostvars("h3", h3var1="h3val1")
+
+    test_inventory.add_group("g1")
+    test_inventory.add_group("g2")
+    test_inventory.add_group("g3")
+    test_inventory.update_groupvars("g2", g2var1="g2val1", g2var2="g2val2")
+    test_inventory.update_groupvars("all", allvar1="allval1", allvar2="allval2")
+
+    test_inventory.add_hosts_to_group("g1", "h1", "h4")
+    test_inventory.add_hosts_to_group("g2", "h2")
+
+    test_inventory.add_children_to_group("g3", "g1", "g2")
+    
+    ini = test_inventory.as_ini()
+
+    assert re.search(r"^h3 h3var1=h3val1\n", ini) is not None
+    assert re.search(r"\n\[g2\]\nh2\n", ini) is not None
+    assert re.search(r"\n\[g2:vars\]\ng2var[12]=g2val[12]\ng2var[12]=g2val[12]\n", ini) is not None
+    assert re.search(r"\n\[g1\]\n(h1 h1var[12]=h1val[12] h1var[12]=h1val[12]\nh4\n|h4\nh1 h1var[12]=h1val[12] h1var[12]=h1val[12]\n)", ini) is not None
+    assert re.search(r"\n\[all:vars\]\nallvar[12]=allval[12]\nallvar[12]=allval[12]\n$", ini) is not None
+
+    assert re.search(r"\n\[g3:children\]\ng[12]\ng[12]\n", ini) is not None

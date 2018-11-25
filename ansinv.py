@@ -188,5 +188,5 @@ class AnsibleInventory:
             for var, val in self._inventory["all"]["vars"].items():
                 final.append("{}={}".format(var,val))
 
-        return "\n".join(final)
+        return "\n".join(final) + "\n"
 
