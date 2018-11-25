@@ -17,5 +17,5 @@ This simple library makes it easier to write ``glue`` code when you are using An
 .. |pic3| image:: https://travis-ci.com/rsjethani/ansinv.svg?branch=master
    :target: https://travis-ci.com/rsjethani/ansinv
 
-.. |pic4| image:: https://coveralls.io/repos/github/rsjethani/ansinv/badge.svg?branch=master
-   :target: https://coveralls.io/github/rsjethani/ansinv?branch=master
+.. |pic4| image:: https://codecov.io/gh/rsjethani/ansinv/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/rsjethani/ansinv
