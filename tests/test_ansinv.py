@@ -31,7 +31,7 @@ def test_empty_inventory(empty_inventory):
     assert json.loads(str(test_inventory)) == expected_inventory
 
 
-def test_add_hosts(empty_inventory):
+def test_add_host(empty_inventory):
     expected_inventory = empty_inventory
     test_inventory = AnsibleInventory()
 
@@ -51,6 +51,12 @@ def test_add_hosts(empty_inventory):
 
     assert len(test_inventory.hosts) == len(new_hosts)
 
+    # Test adding existing host but with different hostvars
+    test_inventory.add_host("h2", var1="new_value")
+    assert (json.loads(str(test_inventory))["_meta"]["hostvars"]["h2"]
+        == {"var1": "new_value", "var2": "val2"}
+    )
+
 
 def test_get_hostvars():
     test_inventory = AnsibleInventory()
@@ -63,4 +69,15 @@ def test_get_hostvars():
     test_inventory.add_host("h1", **hostvars)
     assert test_inventory.get_hostvars("h1") == hostvars
 
+
+def test_get_groupvars():
+    test_inventory = AnsibleInventory()
+
+    with pytest.raises(GroupsNotFound) as err:
+        test_inventory.get_groupvars("g1")
+    assert err.value.args == ("g1",)
+
+    groupvars = {"var1": "val1"}
+    test_inventory.add_group("g1", **groupvars)
+    assert test_inventory.get_groupvars("g1") == groupvars
 
