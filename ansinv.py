@@ -116,7 +116,7 @@ class AnsibleInventory:
         # finally add all children to parent
         self._inventory[parent]["children"] |= set(children)
 
-    def update_ungrouped_hosts(self, *hosts):
+    def keep_hosts_ungrouped_also(self, *hosts):
         hosts = set(hosts)
         non_existing = hosts - self._all_hosts
         if non_existing:
