@@ -51,11 +51,9 @@ def test_add_host(empty_inventory):
 
     assert len(test_inventory.hosts) == len(new_hosts)
 
-    # Test adding existing host but with different hostvars
-    test_inventory.add_host("h2", var1="new_value")
-    assert (json.loads(str(test_inventory))["_meta"]["hostvars"]["h2"]
-        == {"var1": "new_value", "var2": "val2"}
-    )
+    # Test: Adding existing host should be a no-op
+    test_inventory.add_host("h1", var1="value")
+    assert json.loads(str(test_inventory))["_meta"]["hostvars"]["h1"] == {}
 
 
 def test_get_hostvars():

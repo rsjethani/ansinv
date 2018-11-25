@@ -43,11 +43,9 @@ class AnsibleInventory:
             self.add_host(host)
 
     def add_host(self, host, **hostvars):
-        self._all_hosts.add(host)
-        self._ungrouped_hosts.add(host)
-        try:
-            self._hostvars[host].update(hostvars)
-        except KeyError:
+        if host not in self._all_hosts:
+            self._all_hosts.add(host)
+            self._ungrouped_hosts.add(host)
             self._hostvars[host] = hostvars
 
     def get_hostvars(self, host):
