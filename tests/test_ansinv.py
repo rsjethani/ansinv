@@ -61,10 +61,21 @@ def test_get_hostvars():
 
     with pytest.raises(HostsNotFound) as err:
         test_inventory.get_hostvars("h1")
-    assert err.value.args == ("h1",)
 
     hostvars = {"var1": "val1"}
     test_inventory.add_host("h1", **hostvars)
+    assert test_inventory.get_hostvars("h1") == hostvars
+
+
+def test_update_hostvars():
+    test_inventory = AnsibleInventory()
+    hostvars = {"var1": "val1"}
+
+    with pytest.raises(HostsNotFound) as err:
+        test_inventory.update_hostvars("h1", **hostvars)
+
+    test_inventory.add_host("h1")
+    test_inventory.update_hostvars("h1", **hostvars)
     assert test_inventory.get_hostvars("h1") == hostvars
 
 
@@ -108,4 +119,24 @@ def test_get_groupvars():
     groupvars = {"var1": "val1"}
     test_inventory.add_group("g1", **groupvars)
     assert test_inventory.get_groupvars("g1") == groupvars
+
+
+def test_update_groupvars():
+    test_inventory = AnsibleInventory()
+    groupvars = {"var1": "val1"}
+
+    with pytest.raises(GroupsNotFound) as err:
+        test_inventory.update_groupvars("g1", **groupvars)
+
+    test_inventory.add_group("g1")
+    test_inventory.update_groupvars("g1", **groupvars)
+    assert test_inventory.get_groupvars("g1") == groupvars
+
+
+def test_keep_hosts_ungrouped_also():
+    test_inventory = AnsibleInventory("h1", "h2")
+    test_inventory.add_group("g1")
+    test_inventory.add_hosts_to_group("g1", "h1")
+    test_inventory.keep_hosts_ungrouped_also("h1")
+    assert "h1", "h2" in test_inventory.ungrouped
 
