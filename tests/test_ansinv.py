@@ -53,7 +53,7 @@ def test_add_host(empty_inventory):
 
     # Test: Adding existing host should be a no-op
     test_inventory.add_host("h1", var1="value")
-    assert json.loads(str(test_inventory))["_meta"]["hostvars"]["h1"] == {}
+    assert json.loads(str(test_inventory))["_meta"]["hostvars"]["h1"] == expected_inventory["_meta"]["hostvars"]["h1"]
 
 
 def test_get_hostvars():
@@ -89,11 +89,9 @@ def test_add_group(empty_inventory):
     # '1' is for the implied "all" group
     assert len(test_inventory.groups) == len(new_groups) + 1
 
-    # Test adding existing group but with different groupvars
-    test_inventory.add_group("g2", var1="new_value")
-    assert (json.loads(str(test_inventory))["g2"]["vars"]
-        == {"var1": "new_value", "var2": "val2"}
-    )
+    # Test: Adding existing group should be a no-op
+    test_inventory.add_group("g1", var1="value")
+    assert json.loads(str(test_inventory))["g1"] == expected_inventory["g1"]
 
     # Test use of reserved names for a new group
     with pytest.raises(ValueError) as err:

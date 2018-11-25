@@ -64,9 +64,7 @@ class AnsibleInventory:
         if group in ("_meta", "ungrouped"):
             raise ValueError("name '{}' is reserved hence cannot be used as a group name".format(group))
 
-        if group in self.groups:
-            self._inventory[group]["vars"].update(groupvars)
-        else:
+        if group not in self.groups:
             self._inventory[group] = {
                 "vars": groupvars,
                 "hosts": set(),
