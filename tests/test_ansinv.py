@@ -70,6 +70,38 @@ def test_get_hostvars():
     assert test_inventory.get_hostvars("h1") == hostvars
 
 
+def test_add_group(empty_inventory):
+    expected_inventory = empty_inventory
+    test_inventory = AnsibleInventory()
+
+    new_groups = {"g1": {}, "g2": {"var1": "val1", "var2": "val2"}}
+    for group, groupvars in new_groups.items():
+        expected_inventory[group] = {
+            "vars": groupvars,
+            "hosts": [],
+            "children": []
+        }
+        expected_inventory["all"]["children"].append(group)
+
+        test_inventory.add_group(group, **groupvars)
+
+        assert json.loads(str(test_inventory))[group] == expected_inventory[group]
+        assert group in json.loads(str(test_inventory))["all"]["children"]
+
+    # '1' is for the implied "all" group
+    assert len(test_inventory.groups) == len(new_groups) + 1
+
+    # Test adding existing group but with different groupvars
+    test_inventory.add_group("g2", var1="new_value")
+    assert (json.loads(str(test_inventory))["g2"]["vars"]
+        == {"var1": "new_value", "var2": "val2"}
+    )
+
+    # Test use of reserved names for a new group
+    with pytest.raises(ValueError) as err:
+        test_inventory.add_group("_meta")
+
+
 def test_get_groupvars():
     test_inventory = AnsibleInventory()
 
