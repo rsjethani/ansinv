@@ -59,7 +59,7 @@ def test_add_host(empty_inventory):
 def test_get_hostvars():
     test_inventory = AnsibleInventory()
 
-    with pytest.raises(HostsNotFound) as err:
+    with pytest.raises(HostsNotFound):
         test_inventory.get_hostvars("h1")
 
     hostvars = {"var1": "val1"}
@@ -71,7 +71,7 @@ def test_update_hostvars():
     test_inventory = AnsibleInventory()
     hostvars = {"var1": "val1"}
 
-    with pytest.raises(HostsNotFound) as err:
+    with pytest.raises(HostsNotFound):
         test_inventory.update_hostvars("h1", **hostvars)
 
     test_inventory.add_host("h1")
@@ -105,16 +105,15 @@ def test_add_group(empty_inventory):
     assert json.loads(str(test_inventory))["g1"] == expected_inventory["g1"]
 
     # Test use of reserved names for a new group
-    with pytest.raises(ValueError) as err:
+    with pytest.raises(ValueError):
         test_inventory.add_group("_meta")
 
 
 def test_get_groupvars():
     test_inventory = AnsibleInventory()
 
-    with pytest.raises(GroupsNotFound) as err:
+    with pytest.raises(GroupsNotFound):
         test_inventory.get_groupvars("g1")
-    assert err.value.args == ("g1",)
 
     groupvars = {"var1": "val1"}
     test_inventory.add_group("g1", **groupvars)
@@ -125,12 +124,44 @@ def test_update_groupvars():
     test_inventory = AnsibleInventory()
     groupvars = {"var1": "val1"}
 
-    with pytest.raises(GroupsNotFound) as err:
+    with pytest.raises(GroupsNotFound):
         test_inventory.update_groupvars("g1", **groupvars)
 
     test_inventory.add_group("g1")
     test_inventory.update_groupvars("g1", **groupvars)
     assert test_inventory.get_groupvars("g1") == groupvars
+
+
+def test_add_hosts_to_group():
+    test_inventory = AnsibleInventory("h1", "h2", "h3")
+    test_inventory.add_group("g1")
+
+    with pytest.raises(GroupsNotFound):
+        test_inventory.add_hosts_to_group("foo", "h1")
+
+    with pytest.raises(HostsNotFound):
+        test_inventory.add_hosts_to_group("g1", "foo")
+    
+    test_inventory.add_hosts_to_group("g1", "h1", "h2")
+    assert "h1", "h2" in json.loads(str(test_inventory))["g1"]["hosts"]
+    assert len(json.loads(str(test_inventory))["g1"]["hosts"]) == 2
+
+
+def test_add_children_to_group():
+    test_inventory = AnsibleInventory()
+    test_inventory.add_group("g1")
+    test_inventory.add_group("g2")
+    test_inventory.add_group("g3")
+
+    with pytest.raises(GroupsNotFound):
+        test_inventory.add_children_to_group("g1", "g2", "g3", "foo")
+
+    with pytest.raises(ValueError):
+        test_inventory.add_children_to_group("g1", "g1")
+
+    test_inventory.add_children_to_group("g1", "g2", "g3")
+    assert "g2", "g3" in json.loads(str(test_inventory))["g1"]["children"]
+    assert len(json.loads(str(test_inventory))["g1"]["children"]) == 2
 
 
 def test_keep_hosts_ungrouped_also():
@@ -139,4 +170,14 @@ def test_keep_hosts_ungrouped_also():
     test_inventory.add_hosts_to_group("g1", "h1")
     test_inventory.keep_hosts_ungrouped_also("h1")
     assert "h1", "h2" in test_inventory.ungrouped
+
+
+def test_groups_property():
+    test_inventory = AnsibleInventory()
+    test_inventory.add_group("g1")
+    test_inventory.add_group("g2")
+    test_inventory.add_group("g3")
+
+    assert "_meta", "ungrouped" not in test_inventory.groups
+    assert len(test_inventory.groups) == 3 + 1
 
