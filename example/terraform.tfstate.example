@@ -1,0 +1,411 @@
+{
+    "version": 3,
+    "terraform_version": "0.11.10",
+    "serial": 13,
+    "lineage": "d90e9734-4d7c-2ff2-8d30-67daa1447376",
+    "modules": [
+        {
+            "path": [
+                "root"
+            ],
+            "outputs": {},
+            "resources": {
+                "libvirt_cloudinit_disk.cloudinit": {
+                    "type": "libvirt_cloudinit_disk",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                        "attributes": {
+                            "id": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                            "meta_data": "",
+                            "name": "cloudinit.iso",
+                            "network_config": "",
+                            "pool": "default",
+                            "user_data": "******"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_domain.manager": {
+                    "type": "libvirt_domain",
+                    "depends_on": [
+                        "libvirt_cloudinit_disk.cloudinit",
+                        "libvirt_volume.manager-vol.*"
+                    ],
+                    "primary": {
+                        "id": "d02d8a42-babe-4162-aa99-eb1d7efafe49",
+                        "attributes": {
+                            "arch": "x86_64",
+                            "autostart": "false",
+                            "cloudinit": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                            "cmdline.#": "0",
+                            "console.#": "2",
+                            "console.0.source_path": "",
+                            "console.0.target_port": "0",
+                            "console.0.target_type": "serial",
+                            "console.0.type": "pty",
+                            "console.1.source_path": "",
+                            "console.1.target_port": "1",
+                            "console.1.target_type": "virtio",
+                            "console.1.type": "pty",
+                            "disk.#": "1",
+                            "disk.0.file": "",
+                            "disk.0.scsi": "false",
+                            "disk.0.url": "",
+                            "disk.0.volume_id": "/var/lib/libvirt/images/docker_swarm-manager-volume-1",
+                            "disk.0.wwn": "",
+                            "emulator": "/usr/bin/kvm-spice",
+                            "firmware": "",
+                            "graphics.#": "1",
+                            "graphics.0.autoport": "true",
+                            "graphics.0.listen_type": "address",
+                            "graphics.0.type": "spice",
+                            "id": "d02d8a42-babe-4162-aa99-eb1d7efafe49",
+                            "initrd": "",
+                            "kernel": "",
+                            "machine": "ubuntu",
+                            "memory": "512",
+                            "name": "docker_swarm-manager-1",
+                            "network_interface.#": "1",
+                            "network_interface.0.addresses.#": "1",
+                            "network_interface.0.addresses.0": "192.168.122.22",
+                            "network_interface.0.bridge": "",
+                            "network_interface.0.hostname": "",
+                            "network_interface.0.mac": "92:86:68:28:43:31",
+                            "network_interface.0.macvtap": "",
+                            "network_interface.0.network_id": "668a0115-1c62-421e-aba1-b5d57175a184",
+                            "network_interface.0.network_name": "default",
+                            "network_interface.0.passthrough": "",
+                            "network_interface.0.vepa": "",
+                            "network_interface.0.wait_for_lease": "true",
+                            "nvram.#": "0",
+                            "qemu_agent": "false",
+                            "running": "true",
+                            "vcpu": "1"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 300000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_domain.monitoring": {
+                    "type": "libvirt_domain",
+                    "depends_on": [
+                        "libvirt_cloudinit_disk.cloudinit",
+                        "libvirt_volume.monitoring-vol.*"
+                    ],
+                    "primary": {
+                        "id": "3e32c224-d38a-41c6-95c1-1acf5df5117f",
+                        "attributes": {
+                            "arch": "x86_64",
+                            "autostart": "false",
+                            "cloudinit": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                            "cmdline.#": "0",
+                            "console.#": "2",
+                            "console.0.source_path": "",
+                            "console.0.target_port": "0",
+                            "console.0.target_type": "serial",
+                            "console.0.type": "pty",
+                            "console.1.source_path": "",
+                            "console.1.target_port": "1",
+                            "console.1.target_type": "virtio",
+                            "console.1.type": "pty",
+                            "disk.#": "1",
+                            "disk.0.file": "",
+                            "disk.0.scsi": "false",
+                            "disk.0.url": "",
+                            "disk.0.volume_id": "/var/lib/libvirt/images/docker_swarm-monitoring-volume-1",
+                            "disk.0.wwn": "",
+                            "emulator": "/usr/bin/kvm-spice",
+                            "firmware": "",
+                            "graphics.#": "1",
+                            "graphics.0.autoport": "true",
+                            "graphics.0.listen_type": "address",
+                            "graphics.0.type": "spice",
+                            "id": "3e32c224-d38a-41c6-95c1-1acf5df5117f",
+                            "initrd": "",
+                            "kernel": "",
+                            "machine": "ubuntu",
+                            "memory": "512",
+                            "name": "docker_swarm-monitoring-1",
+                            "network_interface.#": "1",
+                            "network_interface.0.addresses.#": "1",
+                            "network_interface.0.addresses.0": "192.168.122.80",
+                            "network_interface.0.bridge": "",
+                            "network_interface.0.hostname": "",
+                            "network_interface.0.mac": "92:2F:CC:BF:17:C0",
+                            "network_interface.0.macvtap": "",
+                            "network_interface.0.network_id": "668a0115-1c62-421e-aba1-b5d57175a184",
+                            "network_interface.0.network_name": "default",
+                            "network_interface.0.passthrough": "",
+                            "network_interface.0.vepa": "",
+                            "network_interface.0.wait_for_lease": "true",
+                            "nvram.#": "0",
+                            "qemu_agent": "false",
+                            "running": "true",
+                            "vcpu": "1"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 300000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_domain.worker.0": {
+                    "type": "libvirt_domain",
+                    "depends_on": [
+                        "libvirt_cloudinit_disk.cloudinit",
+                        "libvirt_volume.worker-vol.*"
+                    ],
+                    "primary": {
+                        "id": "a41dc9b6-9fe8-4372-94cf-bc7be74e6ca6",
+                        "attributes": {
+                            "arch": "x86_64",
+                            "autostart": "false",
+                            "cloudinit": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                            "cmdline.#": "0",
+                            "console.#": "2",
+                            "console.0.source_path": "",
+                            "console.0.target_port": "0",
+                            "console.0.target_type": "serial",
+                            "console.0.type": "pty",
+                            "console.1.source_path": "",
+                            "console.1.target_port": "1",
+                            "console.1.target_type": "virtio",
+                            "console.1.type": "pty",
+                            "disk.#": "1",
+                            "disk.0.file": "",
+                            "disk.0.scsi": "false",
+                            "disk.0.url": "",
+                            "disk.0.volume_id": "/var/lib/libvirt/images/docker_swarm-worker-volume-1",
+                            "disk.0.wwn": "",
+                            "emulator": "/usr/bin/kvm-spice",
+                            "firmware": "",
+                            "graphics.#": "1",
+                            "graphics.0.autoport": "true",
+                            "graphics.0.listen_type": "address",
+                            "graphics.0.type": "spice",
+                            "id": "a41dc9b6-9fe8-4372-94cf-bc7be74e6ca6",
+                            "initrd": "",
+                            "kernel": "",
+                            "machine": "ubuntu",
+                            "memory": "512",
+                            "name": "docker_swarm-worker-1",
+                            "network_interface.#": "1",
+                            "network_interface.0.addresses.#": "1",
+                            "network_interface.0.addresses.0": "192.168.122.244",
+                            "network_interface.0.bridge": "",
+                            "network_interface.0.hostname": "",
+                            "network_interface.0.mac": "9A:7B:A2:EC:59:F2",
+                            "network_interface.0.macvtap": "",
+                            "network_interface.0.network_id": "668a0115-1c62-421e-aba1-b5d57175a184",
+                            "network_interface.0.network_name": "default",
+                            "network_interface.0.passthrough": "",
+                            "network_interface.0.vepa": "",
+                            "network_interface.0.wait_for_lease": "true",
+                            "nvram.#": "0",
+                            "qemu_agent": "false",
+                            "running": "true",
+                            "vcpu": "1"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 300000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_domain.worker.1": {
+                    "type": "libvirt_domain",
+                    "depends_on": [
+                        "libvirt_cloudinit_disk.cloudinit",
+                        "libvirt_volume.worker-vol.*"
+                    ],
+                    "primary": {
+                        "id": "9d258e38-70dc-4abb-ba07-fadac3109940",
+                        "attributes": {
+                            "arch": "x86_64",
+                            "autostart": "false",
+                            "cloudinit": "/var/lib/libvirt/images/cloudinit.iso;5bfbb42d-8a3a-6df5-daaa-10c86695ca94",
+                            "cmdline.#": "0",
+                            "console.#": "2",
+                            "console.0.source_path": "",
+                            "console.0.target_port": "0",
+                            "console.0.target_type": "serial",
+                            "console.0.type": "pty",
+                            "console.1.source_path": "",
+                            "console.1.target_port": "1",
+                            "console.1.target_type": "virtio",
+                            "console.1.type": "pty",
+                            "disk.#": "1",
+                            "disk.0.file": "",
+                            "disk.0.scsi": "false",
+                            "disk.0.url": "",
+                            "disk.0.volume_id": "/var/lib/libvirt/images/docker_swarm-worker-volume-2",
+                            "disk.0.wwn": "",
+                            "emulator": "/usr/bin/kvm-spice",
+                            "firmware": "",
+                            "graphics.#": "1",
+                            "graphics.0.autoport": "true",
+                            "graphics.0.listen_type": "address",
+                            "graphics.0.type": "spice",
+                            "id": "9d258e38-70dc-4abb-ba07-fadac3109940",
+                            "initrd": "",
+                            "kernel": "",
+                            "machine": "ubuntu",
+                            "memory": "512",
+                            "name": "docker_swarm-worker-2",
+                            "network_interface.#": "1",
+                            "network_interface.0.addresses.#": "1",
+                            "network_interface.0.addresses.0": "192.168.122.144",
+                            "network_interface.0.bridge": "",
+                            "network_interface.0.hostname": "",
+                            "network_interface.0.mac": "86:CA:57:7D:6B:5D",
+                            "network_interface.0.macvtap": "",
+                            "network_interface.0.network_id": "668a0115-1c62-421e-aba1-b5d57175a184",
+                            "network_interface.0.network_name": "default",
+                            "network_interface.0.passthrough": "",
+                            "network_interface.0.vepa": "",
+                            "network_interface.0.wait_for_lease": "true",
+                            "nvram.#": "0",
+                            "qemu_agent": "false",
+                            "running": "true",
+                            "vcpu": "1"
+                        },
+                        "meta": {
+                            "e2bfb730-ecaa-11e6-8f88-34363bc7c4c0": {
+                                "create": 300000000000
+                            }
+                        },
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_volume.base-vol": {
+                    "type": "libvirt_volume",
+                    "depends_on": [],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                        "attributes": {
+                            "format": "qcow2",
+                            "id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                            "name": "docker_swarm-base-volume",
+                            "pool": "default",
+                            "size": "2361393152",
+                            "source": "/var/lib/libvirt/images/ubuntu-18.04-minimal-cloudimg-amd64.img"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_volume.manager-vol": {
+                    "type": "libvirt_volume",
+                    "depends_on": [
+                        "libvirt_volume.base-vol",
+                        "local.one_gb"
+                    ],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/docker_swarm-manager-volume-1",
+                        "attributes": {
+                            "base_volume_id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                            "format": "qcow2",
+                            "id": "/var/lib/libvirt/images/docker_swarm-manager-volume-1",
+                            "name": "docker_swarm-manager-volume-1",
+                            "pool": "default",
+                            "size": "5000000512"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_volume.monitoring-vol": {
+                    "type": "libvirt_volume",
+                    "depends_on": [
+                        "libvirt_volume.base-vol",
+                        "local.one_gb"
+                    ],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/docker_swarm-monitoring-volume-1",
+                        "attributes": {
+                            "base_volume_id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                            "format": "qcow2",
+                            "id": "/var/lib/libvirt/images/docker_swarm-monitoring-volume-1",
+                            "name": "docker_swarm-monitoring-volume-1",
+                            "pool": "default",
+                            "size": "5000000512"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_volume.worker-vol.0": {
+                    "type": "libvirt_volume",
+                    "depends_on": [
+                        "libvirt_volume.base-vol",
+                        "local.one_gb"
+                    ],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/docker_swarm-worker-volume-1",
+                        "attributes": {
+                            "base_volume_id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                            "format": "qcow2",
+                            "id": "/var/lib/libvirt/images/docker_swarm-worker-volume-1",
+                            "name": "docker_swarm-worker-volume-1",
+                            "pool": "default",
+                            "size": "5000000512"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                },
+                "libvirt_volume.worker-vol.1": {
+                    "type": "libvirt_volume",
+                    "depends_on": [
+                        "libvirt_volume.base-vol",
+                        "local.one_gb"
+                    ],
+                    "primary": {
+                        "id": "/var/lib/libvirt/images/docker_swarm-worker-volume-2",
+                        "attributes": {
+                            "base_volume_id": "/var/lib/libvirt/images/docker_swarm-base-volume",
+                            "format": "qcow2",
+                            "id": "/var/lib/libvirt/images/docker_swarm-worker-volume-2",
+                            "name": "docker_swarm-worker-volume-2",
+                            "pool": "default",
+                            "size": "5000000512"
+                        },
+                        "meta": {},
+                        "tainted": false
+                    },
+                    "deposed": [],
+                    "provider": "provider.libvirt"
+                }
+            },
+            "depends_on": []
+        }
+    ]
+}
