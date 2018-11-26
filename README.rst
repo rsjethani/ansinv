@@ -7,6 +7,16 @@ Overview
 --------
 This simple library makes it easier to write *glue* code between infrastructure bringup/deployment and software provisioning stages of a one-click deployment.
 
+Installation
+------------
+Simply say:
+
+.. code::
+
+   pip install ansinv
+   
+Make sure you are using correct pip (pip/pip3) depending on your Python environment.
+
 Use Case
 --------
 Picture the following Docker Swarm cluster that needs to be brought up and provisioned all in one go. The infrastructure has one manager, two workers, and a cluster heath monitoring node.
