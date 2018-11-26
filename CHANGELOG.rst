@@ -1,3 +1,12 @@
+[v1.3.3] 2018-11-26
+===================
+
+Added
+-----
+* Detailed documentation.
+* Example code for the user.
+
+
 [v1.3.2] 2018-11-26
 ===================
 
