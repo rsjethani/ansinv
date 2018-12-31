@@ -1,192 +1,125 @@
+import copy
 import json
 
 
-class HostsNotFound(Exception):
-    """Raised when a host does not exists in inventory
+class AnsibleHost:
+    def __init__(self, name, **hostvars):
+        self.name = name
+        self.hostvars = hostvars
 
-    Example: raise HostNotFound("host1")
-    """
-    pass
+    def __str__(self):
+        pieces = [self.name]
+        for var, val in self.hostvars.items():
+            pieces.append("{}={}".format(var, val))
+        return " ".join(pieces)
 
 
-class GroupsNotFound(Exception):
-    """Raised when a group does not exists in inventory
+class AnsibleGroup:
+    def __init__(self, name, **groupvars):
+        self._hosts = []
+        self.name = name
+        self._children = []
+        self.groupvars = groupvars
+    
+    @property
+    def hosts(self):
+        return self._hosts
 
-    Example: raise GroupNotFound("group1")
-    """
-    pass
+    @property
+    def children(self):
+        return self._children
+
+    def add_hosts(self, *hosts):
+        for host in hosts:
+            self._hosts.append(copy.deepcopy(host))
+
+    def add_children(self, *children):
+        for group in children:
+            if group.name == self.name:
+                raise ValueError("can't add group to itself.")
+            
+            if group.is_parent_of(self):
+                raise ValueError("can't add parent as a child.")
+            
+            self._children.append(group.name)
+        
+    def host(self, hostname):
+        for host in self._hosts:
+            if host.name == hostname:
+                return host
+        return None
+
+    def child(self, groupname):
+        for group in self._children:
+            if group == groupname:
+                return group
+        return None
+
+    def is_child_of(self, group):
+        return self.name in group.children
+
+    def is_parent_of(self, group):
+        return group.name in self.children
+
+    def __str__(self):
+        pieces = []
+        if self._hosts:
+            pieces.append("\n[{}]".format(self.name))
+            for host in self._hosts:
+                pieces.append(str(host))
+
+        if self.groupvars:
+            pieces.append("\n[{}:vars]".format(self.name))
+            for var, val in self.groupvars.items():
+                pieces.append("{}={}".format(var,val))
+
+        if self._children:
+            pieces.append("\n[{}:children]".format(self.name))
+            for child in self._children:
+                pieces.append(str(child))
+
+        return "\n".join(pieces)
 
 
 class AnsibleInventory:
-    def __init__(self, *hosts):
-        self._inventory = {
-            "_meta": {
-                "hostvars": {}
-            },
-            "all": {
-                "vars": {},
-                "hosts": set(),
-                "children": set(["ungrouped"])
-            },
-            "ungrouped": {
-                "hosts": set()
-            }
-        }
+    def __init__(self, *ungrouped):
+        self._ungrouped = list(ungrouped)
+        self._groups = [AnsibleGroup("all")]
 
-        # internal attributes for easy access to parts of above inventory
-        self._all_hosts = self._inventory["all"]["hosts"]
-        self._all_children = self._inventory["all"]["children"]
-        self._ungrouped_hosts = self._inventory["ungrouped"]["hosts"]
-        self._hostvars = self._inventory["_meta"]["hostvars"]
-
+    def add_hosts(self, *hosts):
         for host in hosts:
-            self.add_host(host)
+            self._ungrouped.append(copy.deepcopy(host))
 
-    def add_host(self, host, **hostvars):
-        if host not in self._all_hosts:
-            self._all_hosts.add(host)
-            self._ungrouped_hosts.add(host)
-            self._hostvars[host] = hostvars
+    def add_groups(self, *groups):
+        for group in groups:
+            self._groups.append(copy.deepcopy(group))
 
-    def get_hostvars(self, host):
-        try:
-            return self._hostvars[host]
-        except KeyError:
-            raise HostsNotFound(host)
+    def host(self, hostname):
+        for host in self._ungrouped:
+            if host.name == hostname:
+                return host
+        return None
 
-    def update_hostvars(self, host, **hostvars):
-        try:
-            self._hostvars[host].update(hostvars)
-        except KeyError:
-            raise HostsNotFound(host)
-
-    def add_group(self, group, **groupvars):
-        if group in ("_meta", "ungrouped"):
-            raise ValueError("a new group cannot use the reserved name '{}'".format(group))
-
-        if group not in self.groups:
-            self._inventory[group] = {
-                "vars": groupvars,
-                "hosts": set(),
-                "children": set()
-            }
-            self._all_children.add(group)
-
-    def get_groupvars(self, group):
-        if group not in self.groups:
-            raise GroupsNotFound(group)
-
-        return self._inventory[group]["vars"]
-
-    def update_groupvars(self, group, **groupvars):
-        if group not in self.groups:
-            raise GroupsNotFound(group)
-
-        self._inventory[group]["vars"].update(groupvars)
-
-    def add_hosts_to_group(self, group, *hosts):
-        if group not in self.groups:
-            raise GroupsNotFound(group)
-
-        # Every host is always a member of 'all' hence do nothing
-        if group == "all":
-            return
-
-        hosts = set(hosts)
-
-        non_existing = hosts - self._all_hosts
-        if non_existing:
-            raise HostsNotFound(non_existing)
-
-        self._ungrouped_hosts -= hosts
-        self._inventory[group]["hosts"] |= hosts
-
-    def add_children_to_group(self, parent, *children):
-        # check all groups exists and they are allowed to be modified
-        non_existing = set((parent,) + children) - set(self.groups)
-        # FYI Python3 only syntax can be like:
-        # non_existing = set([parent, *children]) - set(self.groups)
-        if non_existing:
-            raise GroupsNotFound(non_existing)
-
-        # avoid circular dependency
-        if parent in children:
-                raise ValueError("group '{}' cannot be a child to itself".format(parent))
-
-        # finally add all children to parent
-        self._inventory[parent]["children"] |= set(children)
-
-    def keep_hosts_ungrouped_also(self, *hosts):
-        hosts = set(hosts)
-        non_existing = hosts - self._all_hosts
-        if non_existing:
-            raise HostsNotFound(non_existing)
-
-        self._ungrouped_hosts |= hosts
-
-    @property
-    def hosts(self):
-        return list(self._all_hosts)
-
-    @property
-    def ungrouped(self):
-        return list(self._ungrouped_hosts)
+    def group(self, groupname):
+        for group in self._groups:
+            if group.name == groupname:
+                return group
+        return None
 
     @property
     def groups(self):
-        grps = list(self._inventory)
-        grps.remove("ungrouped")
-        grps.remove("_meta")
-        return grps
+        return self._groups
 
     def __str__(self):
-        class SetJSONEncoder(json.JSONEncoder):
-            def default(self, obj):
-                if isinstance(obj, set):
-                    return list(obj)
-                # Let the base class default method raise the TypeError
-                return json.JSONEncoder.default(self, obj)
-
-        return json.dumps(self._inventory, indent=2, cls=SetJSONEncoder)
-
-    def _host_as_ini(self, host):
-        hostline = [host]
-        for var, val in self._inventory["_meta"]["hostvars"][host].items():
-            hostline.append("{}={}".format(var, val))
-
-        return " ".join(hostline)
-
-    def as_ini(self):
         final = []
 
         # process ungrouped hosts
-        for host in self._inventory["ungrouped"]["hosts"]:
-            final.append(self._host_as_ini(host))
+        for host in self._ungrouped:
+            final.append(str(host))
 
         # process groups
-        for group in set(self.groups) - {"all"}:
-            data = self._inventory[group]
+        for group in self._groups:
+            final.append(str(group))
 
-            if data["hosts"]:
-                final.append("\n[{}]".format(group))
-                for host in data["hosts"]:
-                    final.append(self._host_as_ini(host))
-
-            if data["vars"]:
-                final.append("\n[{}:vars]".format(group))
-                for var, val in data["vars"].items():
-                    final.append("{}={}".format(var,val))
-
-            if data["children"]:
-                final.append("\n[{}:children]".format(group))
-                for child in data["children"]:
-                    final.append("{}".format(child))
-
-        # process all:vars
-        if self._inventory["all"]["vars"]:
-            final.append("\n[{}:{}]".format("all","vars"))
-            for var, val in self._inventory["all"]["vars"].items():
-                final.append("{}={}".format(var,val))
-
-        return "\n".join(final) + "\n"
+        return "\n".join(final).strip()
 
