@@ -10,7 +10,7 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
 
 setup(
     name="ansinv",
-    version="1.3.3",
+    version="2.0.0",
     description="Generate Ansible Inventory",
     long_description=long_description,
     long_description_content_type="text/x-rst",

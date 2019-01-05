@@ -1,3 +1,14 @@
+[v2.0.0] 2019-01-05
+===================
+
+Changed
+-------
+* Major version upgrade, incompatibile with previous versions.
+* Code is now more object oriented. The hosts, groups and inventory are
+  now represented by objects with suitable attributes and operations.
+* The example code was also modified to reflect new code changes.
+
+
 [v1.3.3] 2018-11-26
 ===================
 
