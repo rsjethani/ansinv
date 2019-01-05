@@ -65,5 +65,5 @@ class TestAnsibleInventory:
 
         test_inv.add_groups(g1, g2, g3)
 
-        assert str(test_inv) == "ugh1\nugh2\n\n\n[g1]\nh1\nh2 h2var1=h2val1 h2var2=h2val2\n\n[g2]\nh3\n\n[g2:vars]\ng2var1=g2val1\n\n[g3:children]\ng1\ng2"
+        assert str(test_inv) == "ugh1\nugh2\n\n[g1]\nh1\nh2 h2var1=h2val1 h2var2=h2val2\n\n[g2]\nh3\n\n[g2:vars]\ng2var1=g2val1\n\n[g3:children]\ng1\ng2"
 

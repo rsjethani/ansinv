@@ -117,9 +117,12 @@ class AnsibleInventory:
         for host in self._ungrouped:
             final.append(str(host))
 
-        # process groups
-        for group in self._groups:
+        # process groups except 'all'
+        for group in self._groups[1:]:
             final.append(str(group))
 
+        # process group 'all'
+        final.append(str(self._groups[0]))
+        
         return "\n".join(final).strip()
 

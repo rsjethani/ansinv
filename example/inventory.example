@@ -1,7 +1,3 @@
-[all:vars]
-ansible_user=testuser
-ansible_ssh_private_key_file=cloud.key
-
 [master]
 192.168.122.22 host_name=kube-master-1
 
@@ -20,3 +16,7 @@ kibana_port=3000
 [k8s-cluster:children]
 master
 worker
+
+[all:vars]
+ansible_user=testuser
+ansible_ssh_private_key_file=cloud.key
