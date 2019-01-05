@@ -49,12 +49,6 @@ class AnsibleGroup:
                 return host
         return None
 
-    def child(self, groupname):
-        for group in self._children:
-            if group == groupname:
-                return group
-        return None
-
     def is_child_of(self, group):
         return self.name in group.children
 

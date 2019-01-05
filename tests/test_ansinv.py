@@ -38,13 +38,26 @@ class TestAnsibleGroup:
         assert test_grp1.host("h1").name == "h1"
 
     def test_group_and_children_relation(self):
-        test_grp1 = AnsibleGroup("grp1")
-        test_grp1.add_children(AnsibleGroup("child1"), AnsibleGroup("child2"))
+        parent = AnsibleGroup("parent")
+        child = AnsibleGroup("child")
+        parent.add_children(child)
 
-        assert len(test_grp1.children) == 2
-        assert test_grp1.child("dummy") == None
-        assert test_grp1.child("child1") == "child1"
+        assert len(parent.children) == 1
+        assert parent.is_parent_of(child)
+        assert child.is_child_of(parent)
 
+        some_grp = AnsibleGroup("some_grp")
+        assert not parent.is_parent_of(some_grp)
+        assert not some_grp.is_child_of(parent)
+
+    def test_adding_self_or_parent_as_child(self):
+        parent = AnsibleGroup("parent")
+        child = AnsibleGroup("child")
+        parent.add_children(child)
+
+        with pytest.raises(ValueError):
+            parent.add_children(parent)
+            child.add_children(parent)
 
 class TestAnsibleInventory:
     def test_empty_inventory(self):
@@ -52,7 +65,9 @@ class TestAnsibleInventory:
         assert str(test_inv) == ""
 
     def test_full_inventory(self):
-        test_inv = AnsibleInventory(AnsibleHost("ugh1"), AnsibleHost("ugh2"))
+        test_inv = AnsibleInventory(AnsibleHost("ugh1"))
+
+        test_inv.add_hosts(AnsibleHost("ugh2"))
 
         g1 = AnsibleGroup("g1")
         g1.add_hosts(AnsibleHost("h1"), AnsibleHost("h2", h2var1="h2val1", h2var2="h2val2"))
@@ -64,6 +79,9 @@ class TestAnsibleInventory:
         g3.add_children(g1,g2)
 
         test_inv.add_groups(g1, g2, g3)
+
+        assert test_inv.host("ugh1").name == "ugh1"
+        assert test_inv.group("g1").name == "g1"
 
         assert str(test_inv) == "ugh1\nugh2\n\n[g1]\nh1\nh2 h2var1=h2val1 h2var2=h2val2\n\n[g2]\nh3\n\n[g2:vars]\ng2var1=g2val1\n\n[g3:children]\ng1\ng2"
 
