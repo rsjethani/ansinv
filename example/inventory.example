@@ -1,25 +1,22 @@
+[all:vars]
+ansible_user=testuser
+ansible_ssh_private_key_file=cloud.key
 
-[cluster:children]
-manager
-monitoring
-worker
+[master]
+192.168.122.22 host_name=kube-master-1
 
-[manager]
-192.168.122.22 host_name=manager-0
+[worker]
+192.168.122.244 host_name=kube-worker-1
+192.168.122.144 host_name=kube-worker-2
 
 [monitoring]
-192.168.122.80 host_name=monitoring-0
+192.168.122.80 host_name=kube-monitoring-1
 
 [monitoring:vars]
 elastic_port=6000
 logstash_port=6100
 kibana_port=3000
 
-[worker]
-192.168.122.244 host_name=worker-0
-192.168.122.144 host_name=worker-1
-
-[all:vars]
-ansible_user=testuser
-ansible_ssh_private_key_file=cloud.key
-
+[k8s-cluster:children]
+master
+worker
