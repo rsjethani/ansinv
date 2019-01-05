@@ -1,3 +1,15 @@
+[v2.0.1] 2019-01-05
+===================
+
+Added
+-----
+* Added more test cases to improve code coverage
+
+Removed
+-------
+* Removed unused child() method from AnsibleGroup
+
+
 [v2.0.0] 2019-01-05
 ===================
 
