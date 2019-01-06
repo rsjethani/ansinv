@@ -21,7 +21,7 @@ inventory.group("monitoring").groupvars.update(elastic_port=6000, logstash_port=
 inventory.group("all").groupvars.update(ansible_user="testuser", ansible_ssh_private_key_file="cloud.key")
 
 # load terraform state file
-with open("terraform.tfstate.example") as file:
+with open("terraform.tfstate") as file:
     state = json.load(file)
 
 # Add hosts to groups and/or inventory
@@ -37,5 +37,5 @@ for resource, res_info in state["modules"][0]["resources"].items():
         inventory.group(grp_name).add_hosts(AnsibleHost(host_ip, host_name=name))
 
 # Write inventory data to a file in ini format.
-with open("inventory.example", "w") as file:
+with open("inventory", "w") as file:
     file.write(str(inventory))
