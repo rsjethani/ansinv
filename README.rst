@@ -1,29 +1,26 @@
 |pic1| |pic2| |pic3| |pic4|
 
-
+####################################
 A Simple Ansible Inventory Generator
-====================================
-
+####################################
 
 Overview
---------
+********
 This simple library makes it easier to write *glue* code between infrastructure bringup/deployment and software provisioning stages of a one-click deployment.
 
 Head over to the `wiki page <https://github.com/rsjethani/ansinv/wiki#welcome-to-the-ansinv-wiki>`_ for more expanation about this project.
 
-
 Installation
-------------
+************
 Simply say::
 
    pip install ansinv
 
-
 Usage
------
+*****
 
 Working with ansible inventory hosts
-....................................
+====================================
 Creating a host object with optional `host variables <https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#host-variables>`_::
 
    host1 = ansinv.AnsibleHost("192.168.10.11", affinity=12, scan="no")
@@ -39,7 +36,7 @@ Read and update a host object's host variables. The ``hostvars`` attribute is es
    host1.hostvars.update(x=100)
 
 Working with ansible inventory groups
-.....................................
+=====================================
 Creating a group object with optional `group variables <https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#group-variables>`_::
 
    group1 = ansinv.AnsibleGroup("group1", ssh_port=8800)
@@ -55,7 +52,7 @@ Adding hosts to a group::
    group1.add_hosts(host1, host2, ...) # host1, host2, etc. must already exist
    group1.add_hosts(ansinv.AnsibleHost("192.168.12.12", hostvar1="value")) # creating and adding hosts at the same time
    
-**Please note:** Adding a host object actually creates a **copy** of the host object under the group object. So to make modification made to a host object after it has been added use ``AnsibleGroup.host(hostname)`` method.
+**Please note:** Adding a host object actually creates a **copy** of the host object under the group object. So to make modifications to a host object after it has been added, use ``AnsibleGroup.host(hostname)`` method.
 
 Get access to a host object using ``AnsibleGroup.host(hostname)`` method::
 
