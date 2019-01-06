@@ -8,7 +8,7 @@ Overview
 ********
 This simple library makes it easier to write *glue* code between infrastructure bringup/deployment and software provisioning stages of a one-click deployment.
 
-Head over to the `wiki page <https://github.com/rsjethani/ansinv/wiki#welcome-to-the-ansinv-wiki>`_ for more expanation about this project.
+Head over to the `wiki page <https://github.com/rsjethani/ansinv/wiki#welcome-to-the-ansinv-wiki>`_ for more explanation about this project.
 
 Installation
 ************
@@ -23,7 +23,7 @@ Working with ansible inventory hosts
 ====================================
 
 Creating a host object with optional `host variables <https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#host-variables>`_:
-----------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 ::
 
    host1 = ansinv.AnsibleHost("192.168.10.11", affinity=12, scan="no")
@@ -46,7 +46,7 @@ Working with ansible inventory groups
 =====================================
 
 Creating a group object with optional `group variables <https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#group-variables>`_:
------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ::
 
    group1 = ansinv.AnsibleGroup("group1", ssh_port=8800)
@@ -125,3 +125,4 @@ For more explanation and a full example please refer the `wiki page <https://git
 
 .. |pic4| image:: https://codecov.io/gh/rsjethani/ansinv/branch/master/graph/badge.svg
             :target: https://codecov.io/gh/rsjethani/ansinv
+
