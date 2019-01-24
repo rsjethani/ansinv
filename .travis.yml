@@ -6,7 +6,7 @@ python:
 
 install:
   - pip install --upgrade pip
-  - pip install pytest pytest-cov codecov
+  - pip install --upgrade pytest pytest-cov codecov
 
 script:  
   - python -m pytest -v --cov ansinv tests/
