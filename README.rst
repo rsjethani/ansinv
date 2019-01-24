@@ -76,17 +76,19 @@ Adding hosts to a group using ``AnsibleGroup.add_hosts`` method:
   
 **Please note:** Adding a host actually creates a **copy** of the host object under the group. So to make modifications to a host object after it has been added, use ``AnsibleGroup.host`` method as described below.
 
-Get access to a member host using ``AnsibleGroup.host`` method:
------------------------------------------------------------------
+Get access to a member host using ``AnsibleGroup.host('hostname')`` method:
+---------------------------------------------------------------------------
 ::
 
    group1.host("192.168.1.12").hostvars["hostvar1"] = "new value"
+
+**Please note:** The host() method will always return the first occurrence of the given 'hostname', even if there are multiple hosts with same name in the group. This behavior assumes that even though you are allowed to have multiple hosts with same name but you will never actually require such a case.
    
 Get a list of all host objects in a group using ``AnsibleGroup.hosts`` attribute:
 ---------------------------------------------------------------------------------
 ::
 
-   group1.hosts
+   print(group1.hosts[0].name)
 
 Establish parent-child relation between groups using ``AnsibleGroup.add_children`` method:
 ------------------------------------------------------------------------------------------
@@ -111,11 +113,11 @@ Check whether the group is a child of given group using ``AnsibleGroup.is_child_
 
    group1.is_child_of(group2)   # Returns a bool value
 
-Get a list of names of all child groups using ``AnsibleGroup.children`` attribute:
+Get a list of all child objects using ``AnsibleGroup.children`` attribute:
 ----------------------------------------------------------------------------------
 ::
 
-   group1.children   # ["child1", "child2", ...]
+   print(group1.children[0].name)
 
 
 =Working with the inventory itself=
@@ -155,12 +157,14 @@ Get an *ungrouped* host object from the inventory using ``AnsibleInventory.host`
    print(inv.host("h1"))
    inv.host("h1").hostvars["somevar"] = 111  # modify an ungrouped host after it has been added to the inventory
 
-Get a group object from the inventory using ``AnsibleInventory.group`` method:
-------------------------------------------------------------------------------
+Get a group object from the inventory using ``AnsibleInventory.group('groupname')`` method:
+-------------------------------------------------------------------------------------------
 ::
 
-   print(inv.group("g1"))
-   inv.group("g1").host("h1").hostvars["somevar"] = 333  # modify a group after it has been added to the inventory
+   inv.group("g1").groupvars["x"] = 1111
+   inv.group("g1").host("h1").hostvars["somevar"] = 333
+
+**Please note:** The group() method will always return the first occurrence of the given 'groupname', even if there are multiple groups with same name in the inventory. This behavior assumes that even though you are allowed to have multiple groups with same name but you will never actually require such a case.
 
 Get a list of all group objects from the inventory using ``AnsibleInventory.groups`` attribute:
 -----------------------------------------------------------------------------------------------
