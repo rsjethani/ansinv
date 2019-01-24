@@ -41,7 +41,7 @@ class AnsibleGroup:
             if group.is_parent_of(self):
                 raise ValueError("can't add parent as a child.")
             
-            self._children.append(group.name)
+            self._children.append(group)
         
     def host(self, hostname):
         for host in self._hosts:
@@ -50,10 +50,10 @@ class AnsibleGroup:
         return None
 
     def is_child_of(self, group):
-        return self.name in group.children
+        return self in group.children
 
     def is_parent_of(self, group):
-        return group.name in self.children
+        return group in self.children
 
     def __str__(self):
         pieces = []
@@ -70,7 +70,7 @@ class AnsibleGroup:
         if self._children:
             pieces.append("\n[{}:children]".format(self.name))
             for child in self._children:
-                pieces.append(str(child))
+                pieces.append(child.name)
 
         return "\n".join(pieces)
 
