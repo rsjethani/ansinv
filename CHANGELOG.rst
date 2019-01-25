@@ -1,3 +1,11 @@
+[v3.0.0] 2019-01-25
+===================
+
+Changed
+-------
+* AnsibleGroup.children will return a list of AnsibleGroup objects instead of a list of strings. This breaks backward compatibility.
+* Updated README with usage of all objects.
+
 [v2.0.3] 2019-01-06
 ===================
 
