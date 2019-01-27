@@ -23,11 +23,11 @@ class AnsibleGroup:
     
     @property
     def hosts(self):
-        return self._hosts
+        return copy.copy(self._hosts)
 
     @property
     def children(self):
-        return self._children
+        return copy.copy(self._children)
 
     def add_hosts(self, *hosts):
         for host in hosts:
@@ -102,7 +102,7 @@ class AnsibleInventory:
 
     @property
     def groups(self):
-        return self._groups
+        return copy.copy(self._groups)
 
     def __str__(self):
         final = []
