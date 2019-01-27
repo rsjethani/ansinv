@@ -1,3 +1,10 @@
+[v4.0.0] 2019-01-28
+===================
+
+Changed
+-------
+* The 'properties' of AnsibleHost, AnsibleGroup, and AnsibleInventory classes now return copies on internal objects instead of direct references. This is ``backward incompatible`` hence major version update in required.
+
 [v3.0.0] 2019-01-25
 ===================
 
