@@ -1,3 +1,19 @@
+"""A simple module for generating Ansible Inventory
+
+This module makes it easy to write a Python script for dynamically generating
+an Ansible inventory. It wraps all the boiler plate code and gives you a nice
+and easy to use API.
+
+The API exposes:
+* 'AnsibleHost' class for managing individual hosts
+* 'AnsibleGroup' class for managing groups of hosts
+* 'AnsibleInventory' class for managing the inventory as a whole
+
+Please visit https://github.com/rsjethani/ansinv for more documentation
+and examples.
+"""
+
+
 import copy
 import json
 
